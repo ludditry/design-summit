@@ -1,0 +1,9 @@
+*.nexe
+*.null
+*.log
+*.nvram
+*.o
+*.tar
+*.swp
+*.manifest
+*.scp

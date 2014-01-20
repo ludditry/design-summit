@@ -1,0 +1,5 @@
+[time]
+seconds={SECONDS}
+
+[debug]
+verbosity={VERBOSITY}
