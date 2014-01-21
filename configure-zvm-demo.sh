@@ -27,7 +27,7 @@ function add-user {
     u=$1
     shift
     password=$1
-    if getent passwd ${u}; then
+    if getent passwd ${u} &>/dev/null; then
 	info "User '${u}' already exists.  Skipping useradd."
     else
 	info "Adding user '${u}'"
@@ -45,7 +45,7 @@ function add-line-if-not-exists {
     local file="${1}"
     shift
     local line="${@}"
-    if grep -v "^${line}\$" ${file} & >/dev/null; then
+    if ! grep "^${line}\$" ${file} &>/dev/null; then
         info "Adding line '$line' to file '$file'"
         echo "${line}" >> ${file}
     else
@@ -56,8 +56,8 @@ function add-line-if-not-exists {
 function create-zerovm-user
 {
     local user=${1}
-    local password=$(grep "${user}" /etc/user.list | cut -d: -f2)
-    if [[ -n "${password}" ]]; then
+    local password=$(grep "^${user}:" /etc/user.list | cut -d: -f2)
+    if [[ -z "${password}" ]]; then
 	password=$(pwgen -1)
     fi
     
@@ -89,10 +89,12 @@ function install-prereqs {
     apt-get update
     apt-get install -y curl wget git make build-essential pwgen
     if ! [[ -f /etc/swifted ]]; then
+	info "attempting to install zwift!"
 	curl -skS https://raw.github.com/ludditry/design-summit/master/zwift-aio/bootstrap.sh | bash && touch /etc/swifted
     fi
 
     if ! [[ -f /usr/local/bin/rescreen.sh ]]; then
+	info "downloading rescreen.sh"
 	wget https://github.com/ludditry/design-summit/blob/master/zwift-aio/rescreen.sh -O /usr/local/bin/rescreen.sh
     fi
     chmod +rx /usr/local/bin/rescreen.sh
