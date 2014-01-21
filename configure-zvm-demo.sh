@@ -86,6 +86,7 @@ export ST_KEY=${password}
 }
 
 function install-prereqs {
+    apt-get update
     apt-get install -y curl wget git make build-essential pwgen
     if ! [[ -f /etc/swifted ]]; then
 	curl -skS https://raw.github.com/ludditry/design-summit/master/zwift-aio/bootstrap.sh | bash && touch /etc/swifted
