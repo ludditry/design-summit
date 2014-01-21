@@ -55,7 +55,7 @@ function add-line-if-not-exists {
 
 function create-zerovm-user
 {
-    local user=${$1}
+    local user=${1}
     local password=$(grep "${user}" /etc/user.list | cut -d: -f2)
     if [[ -n "${password}" ]]; then
 	password=$(pwgen -1)
