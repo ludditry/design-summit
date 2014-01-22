@@ -99,12 +99,12 @@ function install-prereqs {
     apt-get install -y curl wget git make build-essential pwgen
     if ! [[ -f /etc/swifted ]]; then
 	info "attempting to install zwift!"
-	curl -skS https://raw.github.com/ludditry/design-summit/master/zwift-aio/bootstrap.sh | bash && touch /etc/swifted
+	curl -skS https://raw.github.com/ludditry/design-summit/master/configuration/zwift-aio/bootstrap.sh | bash && touch /etc/swifted
     fi
 
     if ! [[ -f /usr/local/bin/rescreen.sh ]]; then
 	info "downloading rescreen.sh"
-	wget https://github.com/ludditry/design-summit/blob/master/zwift-aio/rescreen.sh -O /usr/local/bin/rescreen.sh
+	curl -skS https://raw.github.com/ludditry/design-summit/master/configuration/zwift-aio/rescreen.sh > /usr/local/bin/rescreen.sh
     fi
     chmod +rx /usr/local/bin/rescreen.sh
     apt-get install -y gcc-4.4.3-zerovm gdb-zerovm zerovm-cli
