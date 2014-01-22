@@ -58,7 +58,8 @@ function create-zerovm-user
     local user=${1}
     local password=$(grep "^${user}:" /etc/user.list | cut -d: -f2)
     if [[ -z "${password}" ]]; then
-	password=$(pwgen -1)
+	# tempauth requires base64 encoding of usernames / passwords with _.  Let's skip that.
+	password=$(until pwgen -1 | grep -v _; do :; done)
     fi
     
     if ! [[ -d /usr/share/design-summit ]]; then
@@ -68,7 +69,8 @@ function create-zerovm-user
 	git pull
 	popd
     fi
-    add-user ${user} ${password}    
+    add-user ${user} ${password}
+    add-swift-user "${user}" "${user}" "${password}"
     pushd /home/${user}
     if ! [[ -d design-summit ]]; then
 	su ${user} -c "git clone /usr/share/design-summit"
@@ -83,6 +85,13 @@ export ST_USER=${user}:${user}
 export ST_KEY=${password}
 " > /home/${user}/zvmrc
     add-line-if-not-exists /home/${user}/.bashrc "source ~/zvmrc"
+}
+
+function add-swift-user {
+    tenant=$1
+    user=$2
+    password=$3
+    add-line-if-not-exists /etc/swift/proxy-server.conf "user_${tenant}_${user} = ${password} .admin"
 }
 
 function install-prereqs {
@@ -105,6 +114,11 @@ function main {
     install-prereqs
     for u in zerovm{1..75}; do
 	create-zerovm-user $u
+    done
+    pkill screen || true
+    for svc in object container account proxy; do
+	swift-init $svc stop
+	swift-init $svc start
     done
 }
 
