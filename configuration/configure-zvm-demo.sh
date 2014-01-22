@@ -80,7 +80,8 @@ function create-zerovm-user
 	popd
     fi
     popd
-    echo "export ST_AUTH=http://localhost:8080/auth/v1.0
+    echo "cat ~/design-summit/instructions.md
+export ST_AUTH=http://localhost:8080/auth/v1.0
 export ST_USER=${user}:${user}
 export ST_KEY=${password}
 " > /home/${user}/zvmrc
