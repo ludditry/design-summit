@@ -118,7 +118,7 @@ function main {
     done
     pkill screen || true
     for svc in object container account proxy; do
-	swift-init $svc stop
+	swift-init $svc stop || true
 	swift-init $svc start
     done
 }
