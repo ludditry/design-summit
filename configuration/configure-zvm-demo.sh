@@ -37,7 +37,7 @@ function add-user {
 	fi
 	touch /etc/user.list
 	chmod 600 /etc/user.list
-	echo "${user}:${password}" >> /etc/user.list
+	add-line-if-not-exists /etc/user.list "${user}:${password}"
     fi
 }
 
