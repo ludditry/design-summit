@@ -64,9 +64,13 @@ function create-zerovm-user
     
     if ! [[ -d /usr/share/design-summit ]]; then
 	git clone https://github.com/ludditry/design-summit /usr/share/design-summit
+	pushd /usr/share/design-summit
+	git submodule update --init
+	popd
     else
 	pushd /usr/share/design-summit
 	git pull
+	git submodule update --init
 	popd
     fi
     add-user ${user} ${password}
@@ -74,9 +78,13 @@ function create-zerovm-user
     pushd /home/${user}
     if ! [[ -d design-summit ]]; then
 	su ${user} -c "git clone /usr/share/design-summit"
+	pushd design-summit
+	su ${user} -c "git submodule update --init"
+	popd
     else
 	pushd design-summit
 	su ${user} -c "git pull"
+	su ${user} -c "git submodule update --init"
 	popd
     fi
     popd
