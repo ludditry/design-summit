@@ -46,10 +46,10 @@ function add-line-if-not-exists {
     shift
     local line="${@}"
     if ! grep "^${line}\$" ${file} &>/dev/null; then
-        info "Adding line '$line' to file '$file'"
-        echo "${line}" >> ${file}
+	info "Adding line '$line' to file '$file'"
+	echo "${line}" >> ${file}
     else
-        info "File '$file' already contains line '${line}'"
+	info "File '$file' already contains line '${line}'"
     fi
 }
 
@@ -61,7 +61,7 @@ function create-zerovm-user
 	# tempauth requires base64 encoding of usernames / passwords with _.  Let's skip that.
 	password=$(until pwgen -1 | grep -v _; do :; done)
     fi
-    
+
     if ! [[ -d /usr/share/design-summit ]]; then
 	git clone https://github.com/ludditry/design-summit /usr/share/design-summit
 	pushd /usr/share/design-summit
