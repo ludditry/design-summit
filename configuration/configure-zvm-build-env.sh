@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 # This script installs the zerovm project from git in an easily
 # buildable manner.
 
@@ -19,7 +19,7 @@ trap clean_up SIGHUP SIGINT SIGTERM EXIT
 
 # Setup
 BASE_REPO="https://github.com/zerovm"
-declare -a REQUIRED_PKGS=(libc6-dev-i386 libglib2.0-dev pkg-config git 
+declare -a REQUIRED_PKGS=(libc6-dev-i386 libglib2.0-dev pkg-config git
     build-essential automake autoconf libtool g++-multilib texinfo flex
     bison groff gperf texinfo subversion libpgm-5.1 flex bison groff
     libncurses5-dev libexpat1-dev)
@@ -85,11 +85,11 @@ function clone_or_update {
     fi
 }
 
-function add_line_if_not_exists {
-    file="${1}"
+function add-line-if-not-exists {
+    local file="${1}"
     shift
-    line="${@}"
-    if grep -v "^${line}\$" ${file} & >/dev/null; then
+    local line="${@}"
+    if ! grep "^${line}\$" ${file} &>/dev/null; then
 	info "Adding line '$line' to file '$file'"
 	echo "${line}" >> ${file}
     else
