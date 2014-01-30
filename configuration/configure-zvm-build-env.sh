@@ -42,12 +42,12 @@ done
 
 if ! declare -p ZVM_OVERRIDE_PATHS &>/dev/null; then
     declare -A ZVM_OVERRIDE_PATHS=(
-        [validator]="${ZEROVM_ROOT}/valz"
-        [linux-headers-for-nacl]="${ZVM_PATH}/toolchain/SRC/linux-headers-for-nacl"
-        [gcc]="${ZVM_PATH}/toolchain/SRC/gcc"
-        [glibc]="${ZVM_PATH}/toolchain/SRC/glibc"
-        [newlib]="${ZVM_PATH}/toolchain/SRC/newlib"
-        [binutils]="${ZVM_PATH}/toolchain/SRC/binutils"
+	[validator]="${ZEROVM_ROOT}/valz"
+	[linux-headers-for-nacl]="${ZVM_PATH}/toolchain/SRC/linux-headers-for-nacl"
+	[gcc]="${ZVM_PATH}/toolchain/SRC/gcc"
+	[glibc]="${ZVM_PATH}/toolchain/SRC/glibc"
+	[newlib]="${ZVM_PATH}/toolchain/SRC/newlib"
+	[binutils]="${ZVM_PATH}/toolchain/SRC/binutils"
     )
 fi
 
@@ -63,9 +63,9 @@ function install-deps {
     pushd ${TMPDIR}/debs
     if ! dpkg -l libzmq3 &>/dev/null || ! dpkg -l libzmq3-dev &>/dev/null; then
 	info "Manually installing zeromq 4.0.1"
-        wget http://zvm.rackspace.com/v1/repo/ubuntu/pool/main/z/zeromq3/libzmq3_4.0.1-ubuntu1_amd64.deb
-        wget http://zvm.rackspace.com/v1/repo/ubuntu/pool/main/z/zeromq3/libzmq3-dev_4.0.1-ubuntu1_amd64.deb
-        DEBCONF_FRONTEND="noninteractive" dpkg --force-confdef --force-confold -i *.deb
+	wget http://zvm.rackspace.com/v1/repo/ubuntu/pool/main/z/zeromq3/libzmq3_4.0.1-ubuntu1_amd64.deb
+	wget http://zvm.rackspace.com/v1/repo/ubuntu/pool/main/z/zeromq3/libzmq3-dev_4.0.1-ubuntu1_amd64.deb
+	DEBCONF_FRONTEND="noninteractive" dpkg --force-confdef --force-confold -i *.deb
     fi
     popd
 }
@@ -76,12 +76,12 @@ function clone_or_update {
     local path=${ZVM_OVERRIDE_PATHS[$project]:-${ZVM_PATH}/${project}}
     if [[ -d "${path}" ]]; then
 	info "Project '${project}' has already been cloned.  Running git pull."
-        pushd "${path}"
-        sudo -u ${ZVM_USER} git pull
-        popd
+	pushd "${path}"
+	sudo -u ${ZVM_USER} git pull
+	popd
     else
 	info "Cloning project '${project}' to path '${path}'"
-        sudo -u ${ZVM_USER} git clone ${ZVM_REPOS[$project]} $path
+	sudo -u ${ZVM_USER} git clone ${ZVM_REPOS[$project]} $path
     fi
 }
 
@@ -101,7 +101,7 @@ function save_settings {
     f="${ZVM_PATH}/zerovm.sh"
     if ! [[ -f "${f}" ]]; then
 	info "Saving environment variables to '${f}'"
-        cat >${f} <<EOF
+	cat >${f} <<EOF
 export ZEROVM_ROOT=${ZEROVM_ROOT}
 export ZVM_PREFIX=${ZVM_PREFIX}
 export ZRT_ROOT=${ZRT_ROOT}
@@ -138,7 +138,7 @@ function main {
     mkdir -p ${ZVM_PREFIX} || true # ensure directory
     pushd "${ZVM_PATH}"
     for p in "${ZVM_PROJECTS[@]}"; do
-        clone_or_update "$p"
+	clone_or_update "$p"
     done
     save_settings
     popd
