@@ -134,8 +134,8 @@ function add-user {
 function main {
     add-user ${ZVM_USER}
     install-deps "${REQUIRED_PKGS[@]}"
-    mkdir -p ${ZVM_PATH} || true # ensure directory
-    mkdir -p ${ZVM_PREFIX} || true # ensure directory
+    mkdir -p ${ZVM_PATH}
+    mkdir -p ${ZVM_PREFIX}
     pushd "${ZVM_PATH}"
     for p in "${ZVM_PROJECTS[@]}"; do
         clone_or_update "$p"
