@@ -39,9 +39,9 @@ apt-get install -y python-software-properties curl wget xfsprogs parted memcache
 
 # add ubuntu cloud-archive for swift 1.10 and rax zerovm repo
 apt-add-repository cloud-archive:havana --yes
-echo "deb [arch=amd64] http://zvm.rackspace.com/v1/repo/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm.list
+sudo su -c 'echo "deb http://packages.zerovm.org/apt/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm-precise.list'
 
-curl -Sks http://zvm.rackspace.com/v1/repo/ubuntu/zerovm.pkg.key | apt-key add -
+wget -O- http://packages.zerovm.org/apt/ubuntu/zerovm.pkg.key | sudo apt-key add -
 
 # update our package lists
 apt-get update
