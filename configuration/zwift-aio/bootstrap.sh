@@ -39,9 +39,9 @@ apt-get install -y python-software-properties curl wget xfsprogs parted memcache
 
 # add ubuntu cloud-archive for swift 1.10 and rax zerovm repo
 apt-add-repository cloud-archive:havana --yes
-echo "deb [arch=amd64] http://packages.zerovm.org/apt/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm.list
+echo "deb [arch=amd64] http://zvm.rackspace.com/v1/repo/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm.list
 
-curl -Sks http://packages.zerovm.org/apt/ubuntu/zerovm.pkg.key | apt-key add -
+curl -Sks http://zvm.rackspace.com/v1/repo/ubuntu/zerovm.pkg.key | apt-key add -
 
 # update our package lists
 apt-get update
@@ -50,7 +50,7 @@ apt-get update
 apt-get install -y swift-object swift-account swift-container swift-proxy swift
 
 # install the zerovm packages
-apt-get install -y zerovm-zmq zerocloud
+apt-get install -y zerovm-zmq python-zerocloud
 
 # disable all swift services so they don't start on boot
 for svc in /etc/init/swift*.conf; do
