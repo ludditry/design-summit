@@ -39,7 +39,7 @@ apt-get install -y python-software-properties curl wget xfsprogs parted memcache
 
 # add ubuntu cloud-archive for swift 1.10 and rax zerovm repo
 apt-add-repository cloud-archive:havana --yes
-sudo su -c 'echo "deb http://packages.zerovm.org/apt/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm-precise.list'
+echo "deb http://packages.zerovm.org/apt/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm-precise.list
 
 wget -O- http://packages.zerovm.org/apt/ubuntu/zerovm.pkg.key | sudo apt-key add -
 
@@ -50,7 +50,7 @@ apt-get update
 apt-get install -y swift-object swift-account swift-container swift-proxy swift
 
 # install the zerovm packages
-apt-get install -y zerovm-zmq python-zerocloud
+apt-get install -y zerovm-zmq zerocloud
 
 # disable all swift services so they don't start on boot
 for svc in /etc/init/swift*.conf; do
@@ -254,10 +254,7 @@ a2enmod proxy
 a2enmod proxy_http
 a2ensite default
 
-# check if /var/www exists
-if [ ! -d "/var/www" ]; then
-  mkdir -p /var/www
-fi
+mkdir -p /var/www
 
 # pull latest ui
 pushd /var/www
