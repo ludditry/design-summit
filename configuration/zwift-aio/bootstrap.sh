@@ -39,9 +39,9 @@ apt-get install -y python-software-properties curl wget xfsprogs parted memcache
 
 # add ubuntu cloud-archive for swift 1.10 and rax zerovm repo
 apt-add-repository cloud-archive:havana --yes
-echo "deb [arch=amd64] http://zvm.rackspace.com/v1/repo/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm.list
+sudo su -c 'echo "deb http://packages.zerovm.org/apt/ubuntu/ precise main" > /etc/apt/sources.list.d/zerovm-precise.list'
 
-curl -Sks http://zvm.rackspace.com/v1/repo/ubuntu/zerovm.pkg.key | apt-key add -
+wget -O- http://packages.zerovm.org/apt/ubuntu/zerovm.pkg.key | sudo apt-key add -
 
 # update our package lists
 apt-get update
@@ -254,12 +254,17 @@ a2enmod proxy
 a2enmod proxy_http
 a2ensite default
 
-service apache2 restart
+# check if /var/www exists
+if [ ! -d "/var/www" ]; then
+  mkdir -p /var/www
+fi
 
 # pull latest ui
 pushd /var/www
 git clone https://github.com/zerovm/zwift-ui
 popd
+
+service apache2 restart
 
 if (screen -ls | grep -q ${SESSION_NAME}); then
     screen -X -S ${SESSION_NAME} -p 0 -X quit
@@ -270,5 +275,14 @@ for service in proxy object container account; do
     do_screen ${service} "/usr/bin/swift-${service}-server -v /etc/swift/${service}-server.conf"$'\n'
 done
 
-screen -S ${SESSION_NAME} -X screen -t shell
-screen -DR
+case "$-" in
+  *i*) # interactive
+    screen -S ${SESSION_NAME} -X screen -t shell
+    screen -DR
+    ;;
+  *) # non-interactive
+    echo "log into the VM and execute"
+    echo "screen -S ${SESSION_NAME} -X screen -t shell"
+    echo "screen -DR"
+    ;;
+esac
